@@ -2,23 +2,25 @@ package com.metasys.VaultApplication.Model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "VAULT_KEYWORD_TAGS")
-public class KeywordTag {
+@Table(name = "vault_audit")
+@Builder
+public class AuditDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
-    private String keywordTag;
-
-    @ManyToOne
-    @JoinColumn(name = "User_Id")
-    private VaultData vaultData;
+    private String username;
+    @Column(name = "access_date")
+    private LocalDateTime accessDate;
+    private String comment;
 }
