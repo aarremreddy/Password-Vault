@@ -1,0 +1,186 @@
+
+## **Microsoft Sign-In + Local Credentials Integration (Windows + VS Code + Nginx)**
+
+### **1. Microsoft Entra ID App Registration**
+
+**Goal:** Register your app so Microsoft knows where to send users back after sign-in.
+
+**Steps:**
+
+1. Log into **[Microsoft Entra Admin Center](https://entra.microsoft.com/)**.
+2. Navigate: **Azure Active Directory** → **App registrations** → **New registration**.
+3. Fill:
+
+   * **Name**: `Metasys Web Application`
+   * **Supported account types**: *Accounts in this organizational directory only*.
+   * **Redirect URI**: Select **Single-page application (SPA)** and set:
+
+     ```
+     http://localhost:8080/login.html
+     ```
+4. Click **Register**.
+5. Copy:
+
+   * **Application (client) ID** → `clientId`
+   * **Directory (tenant) ID** → `tenantId`
+6. Go to **Authentication**:
+
+   * Ensure redirect URI matches `http://localhost:8080/login.html`
+   * Enable **ID tokens** (for implicit flow).
+7. Go to **API permissions**:
+
+   * Add **Microsoft Graph** → Delegated → `User.Read`
+   * Click **Grant admin consent**.
+
+### **2. Folder Structure**
+
+```
+Metasys Web Application/
+│
+├── lib/
+│   └── msal-browser.min.js
+├── login.html
+├── login.css
+├── login.js
+├── landing.html
+├── config.json
+```
+
+**`config.json`**
+
+```json
+{
+  "tenantId": "----------",
+  "clientId": "----------"
+}
+```
+### use node.js and install npm install @azure/msal-browser
+
+### **3. Nginx Setup on Windows**
+
+1. **Download Nginx** (Windows build):
+   [http://nginx.org/en/download.html](http://nginx.org/en/download.html)
+   Extract it
+
+2. Inside `D:\All projects\Password-Vault-Metasys-2025\nginx-1.29.0`, set a server block:
+
+   ```nginx
+   server {
+        listen       8080;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+        root "D:/All projects/Password-Vault-Metasys-2025/Metasys Web Application";
+        index login.html;
+        
+        location ~* \.(js|css|png|jpg|jpeg|gif|svg|ico|woff2?)$ {
+            try_files $uri =404;
+            access_log off;
+            expires 7d;
+        }
+
+        # Serve config.json with no caching so updates take effect right away
+        location = /config.json {
+            try_files /config.json =404;
+            add_header Cache-Control "no-cache, no-store, must-revalidate";
+            expires -1;
+        }
+
+
+        # Default: serve files if they exist; otherwise fall back to login.html
+        # (Helps when you have routes like /landing.html or /landing)
+
+        location / {
+            try_files $uri $uri/ /login.html;
+        }
+    }
+
+3. Start Nginx:
+
+    .\nginx.exe
+
+4. If you change the config:
+
+   ```powershell
+   nginx -s reload
+   ```
+
+5. Access app:
+   [http://localhost:8080/login.html]
+
+---
+
+### **4. Frontend Logic**
+
+You have **two login flows** in `login.js`:
+
+#### **Local Login**
+
+* Checks against hardcoded usernames/passwords (`akruth`, `akshith`, `admin`).
+* Saves login state in `sessionStorage`.
+* Redirects to `landing.html` or `admin.html`.
+
+#### **Microsoft Login**
+
+* Reads `tenantId` and `clientId` from `config.json`.
+* Initializes MSAL.js (`msal-browser.min.js`).
+* Handles Microsoft redirect tokens.
+* Redirects to `landing.html` when login is successful.
+
+### **6. Run & Test**
+
+* Ensure Nginx is running:
+  * Local credential login.
+  * Microsoft sign-in.
+
+
+### **7. Why each component is used**
+
+* **Tenant ID**: Identifies your Microsoft organization.
+* **Client ID**: Identifies your registered application in Entra ID.
+* **Redirect URI**: Where Microsoft sends the token after login.
+* **MSAL.js**: Official Microsoft library to handle OAuth login securely.
+* **config.json**: Keeps IDs outside the code for easy changes.
+* **Nginx**: Serves your static HTML, JS, CSS files and handles `/config.json` with no caching.
+
+“We used the MSAL library, which handles the OAuth flow and makes secure API calls to Microsoft Entra ID endpoints (/authorize and /token) to retrieve tokens. 
+These tokens are then stored client-side for session management.”
+
+Your JavaScript (MSAL.js) —
+When you click “Sign in with Microsoft”, your browser runs:
+
+msalInstance.loginRedirect({ scopes: ["User.Read"] });
+
+
+This tells MSAL to start an OAuth 2.0 / OpenID Connect flow.
+
+Browser → Microsoft Entra ID (Azure AD) —
+MSAL redirects your browser to:
+
+https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/authorize
+
+
+That’s an API endpoint on Microsoft’s servers.
+
+Microsoft login page —
+You type your credentials; Microsoft handles them securely.
+
+Microsoft → Your Redirect URI —
+After successful login, Microsoft sends your browser back to your configured redirect URI:
+
+http://localhost:8080/login.html
+
+
+Along with an authorization code in the URL.
+
+MSAL.js exchanges the code (in the background) with:
+
+https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token
+
+
+This is another API call to Microsoft to get an ID token (and optionally an access token).
+
+MSAL stores the token in localStorage —
+You don’t see the raw API calls because MSAL handles them internally, but your browser is still making HTTPS requests to Microsoft’s APIs.

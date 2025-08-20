@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - Metasys USA</title>
+    <link rel="stylesheet" href="landing.css" />
+
+    <!-- MSAL: try local copy first, then fallback to CDN -->
+    <script src="/lib/msal-browser.min.js"></script>
+    <script>
+      if (!window.msal) {
+        var s = document.createElement('script');
+        s.src = "https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js";
+        document.head.appendChild(s);
+      }
+    </script>
+
+    <!-- landing guard/logic (loads config.json, checks auth, wires logout) -->
+    <script type="module" src="./landing.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="header-images">
+        <img
+          src="https://metasysusa.com/images/logo.svg"
+          alt="Metasys USA Logo"
+          class="logo"
+        />
+        <div class="logout-section">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIs1XePP0G1O0AQB8x6uxPkXyY_PvXlYWGLTJWZfpios_3gsrcqX_jZz1dkxjgCZjrC-w&usqp=CAU"
+            alt="Profile Logo"
+            class="profile-logo"
+          />
+          <button id="logout" class="logout" type="button">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <nav>
+        <ul>
+          <li>
+            <div class="nav-item-header">
+              <span>About</span>
+              <button class="dropdown-btn">&#9660;</button>
+            </div>
+            <div class="dropdown-content">
+              <a href="https://metasysusa.com/index.html" target="_blank">Our Story</a>
+              <a href="#">Mission & Vision</a>
+              <a href="#">Team</a>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item-header">
+              <span>Services</span>
+              <button class="dropdown-btn">&#9660;</button>
+            </div>
+            <div class="dropdown-content">
+              <a href="https://metasysusa.com/service.html" target="_blank">IT Staffing</a>
+              <a href="#">IT Implementation</a>
+              <a href="#">Consultation</a>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item-header">
+              <span>Join Us</span>
+              <button class="dropdown-btn">&#9660;</button>
+            </div>
+            <div class="dropdown-content">
+              <a href="https://metasysusa.com/join-us.html" target="_blank">Career Opportunities</a>
+              <a href="#">Open Positions</a>
+              <a href="#">Apply Now</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <main>
+        <h1 id="welcome">Welcome to Metasys.</h1>
+        <p>
+          The premier provider of exceptional IT staffing and implementation
+          solutions. We are driven by our deep-rooted passion for technology and
+          our unwavering commitment to excellence.
+        </p>
+        <p>
+          At Metasys, we empower businesses to not only navigate but thrive in
+          the ever-evolving digital landscape.
+        </p>
+      </main>
+    </div>
+
+    <footer>
+      <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+      <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - Metasys USA</title>
+    <link rel="stylesheet" href="admin.css" />
+
+    <!-- MSAL: load local copy first, then CDN fallback -->
+    <script src="lib/msal-browser.min.js"></script>
+    <script>
+      if (!window.msal) {
+        var s = document.createElement('script');
+        s.src = "https://alcdn.msauth.net/browser/4.7.0/js/msal-browser.min.js";
+        document.head.appendChild(s);
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="header-images">
+        <img
+          src="https://metasysusa.com/images/logo.svg"
+          alt="Metasys USA Logo"
+          class="logo"
+        />
+        <div class="logout-section">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIs1XePP0G1O0AQB8x6uxPkXyY_PvXlYWGLTJWZfpios_3gsrcqX_jZz1dkxjgCZjrC-w&usqp=CAU"
+            alt="Profile Logo"
+            class="profile-logo"
+          />
+          <button id="logout" class="logout" type="button">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-container">
+      <nav>
+        <ul>
+          <li>
+            <div class="nav-item-header">
+              <span>Admin</span>
+              <button class="dropdown-btn">&#9660;</button>
+            </div>
+            <div class="dropdown-content">
+              <a href="#">User Management</a>
+              <a href="#">Audit Logs</a>
+              <a href="#">Settings</a>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item-header">
+              <span>Reports</span>
+              <button class="dropdown-btn">&#9660;</button>
+            </div>
+            <div class="dropdown-content">
+              <a href="#">Daily</a>
+              <a href="#">Weekly</a>
+              <a href="#">Monthly</a>
+            </div>
+          </li>
+          <li>
+            <div class="nav-item-header">
+              <span>Links</span>
+              <button class="dropdown-btn">&#9660;</button>
+            </div>
+            <div class="dropdown-content">
+              <a href="https://metasysusa.com/" target="_blank">Homepage</a>
+              <a href="https://metasysusa.com/service.html" target="_blank">Services</a>
+              <a href="https://metasysusa.com/join-us.html" target="_blank">Careers</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <main>
+        <h1 id="welcome">Admin Portal</h1>
+        <p>Only authorized admins can view this page.</p>
+      </main>
+    </div>
+
+    <footer>
+      <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+      <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+    </footer>
+
+    <!-- Admin guard + dropdown logic -->
+    <script src="admin.js" defer></script>
+  </body>
+</html>

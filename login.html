@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MetasysUSA - Login Page</title>
+  <link rel="stylesheet" href="login.css" />
+
+  <!-- Try local MSAL first (served by your NGINX), then fallback to CDN -->
+  <script src="lib/msal-browser.min.js"></script>
+  <script>
+    if (!window.msal) {
+      var s = document.createElement('script');
+      s.src = "https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js";
+      document.head.appendChild(s);
+    }
+  </script>
+
+  <!-- login logic (this file fetches /config.json and initializes MSAL) -->
+  <script type="module" src="./login.js"></script>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login Details</h2>
+
+    <!-- Username/password form (existing local login) -->
+    <form id="loginForm">
+      <input class="field" type="text" id="username" placeholder="Username" required />
+      <input class="field" type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <hr style="margin: 20px 0;">
+
+    <!-- Microsoft login button -->
+    <button id="ms-login" style="background-color:#2F2F2F;">Sign in with Microsoft</button>
+  </div>
+</body>
+</html>
