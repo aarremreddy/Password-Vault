@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Metasys USA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="landing-body">
+    <header class="site-header">
+        <div class="header-images">
+            <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="logo">
+
+            <div class="profile-menu">
+                <button id="gear-btn" class="gear-btn" type="button" aria-haspopup="true" aria-expanded="false"
+                    aria-controls="profile-dropdown">
+                    <span class="gear-icon" aria-hidden="true">⚙️</span>
+                    <span class="sr-only">Settings</span>
+                </button>
+
+                <div id="profile-dropdown" class="profile-dropdown-content" role="menu">
+                    <button class="close-btn" type="button" aria-label="Close menu">&times;</button>
+
+                    <div class="profile-header">
+                        <div class="profile-avatar" aria-hidden="true">M</div>
+                        <p>Hi, Member!</p>
+                    </div>
+
+                    <a href="Manage-Account.html" target="_blank" class="manage-account-btn" role="menuitem">
+                        Manage your Account
+                    </a>
+                    <!-- use a link, not a button inside a link -->
+                    <a href="login.html" class="logout-link" role="menuitem">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="site-nav" aria-label="Primary">
+            <ul class="side-nav">
+                <li>
+                    <div class="nav-item-header">
+                        <span>About</span>
+                        <button class="dropdown-btn" type="button" aria-label="Toggle About menu">&#9660;</button>
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="https://metasysusa.com/index.html" target="_blank">Our Story</a>
+                        <a href="#">Mission &amp; Vision</a>
+                        <a href="#">Team</a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="nav-item-header">
+                        <span>Services</span>
+                        <button class="dropdown-btn" type="button" aria-label="Toggle Services menu">&#9660;</button>
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="https://metasysusa.com/service.html" target="_blank">IT Staffing</a>
+                        <a href="#">IT Implementation</a>
+                        <a href="#">Consultation</a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="nav-item-header">
+                        <span>Join Us</span>
+                        <button class="dropdown-btn" type="button" aria-label="Toggle Join Us menu">&#9660;</button>
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="https://metasysusa.com/join-us.html" target="_blank">Career Opportunities</a>
+                        <a href="#">Open Positions</a>
+                        <a href="#">Apply Now</a>
+                    </div>
+                </li>
+
+                <li class="client-services-wrap">
+                    <a href="#client-services" class="client-services-bar">
+                        <span>Client Services</span>
+                        <i class="chev" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main>
+            <div class="wrap">
+                <header class="card">
+                    <div>
+                        <div class="title">Your – Services &amp; Credentials</div>
+                        <div class="muted">
+                            Search a user (e.g., <strong>name/mail</strong>) to view their subscriptions. Passwords are
+                            hidden by default.
+                        </div>
+                    </div>
+
+                    <div class="search-row grid-all">
+                        <input id="searchName" type="search" placeholder="Search by name… (try: ServiceProvider)">
+                        <button id="searchBtn" class="btn" type="button">Search</button>
+                        <div class="perpage">
+                            Per page
+                            <select id="perPage">
+                                <option>5</option>
+                                <option selected>10</option>
+                                <option>15</option>
+                                <option>20</option>
+                            </select>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="card">
+                    <div class="toolbar">
+                        <div class="fw-600">Results</div>
+                        <div id="resultMeta" class="muted"></div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table id="dataTable" class="users-table" aria-label="User services table">
+                            <thead>
+                                <tr>
+                                    <th class="w-140" scope="col">USER ID</th>
+                                    <th scope="col">SERVICE NAME</th>
+                                    <th scope="col">URL</th>
+                                    <th scope="col">USERNAME / EMAIL</th>
+                                    <th class="w-260" scope="col">PASSWORD</th>
+                                    <th scope="col">KEYWORDS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr>
+                                    <td colspan="6" class="empty">Search for a user to load data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination" id="pager" hidden>
+                        <button class="page-btn" id="prevBtn" type="button">&lt; Back</button>
+                        <span class="page-num" id="pageInfo">Page 1 of 1</span>
+                        <button class="page-btn" id="nextBtn" type="button">Next &gt;</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+        <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+    </footer>
+
+    <script type="module" src="client-landing.js"></script>
+</body>
+
+</html>
