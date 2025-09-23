@@ -7,6 +7,7 @@ public class CredentialsMapper {
 
     public static CredentialsDTO toDto(Credentials credentials) {
         CredentialsDTO dto = new CredentialsDTO();
+        dto.setId(credentials.getId());
         dto.setUserId(credentials.getUserId());
         dto.setServiceName(credentials.getServiceName());
         dto.setUrl(credentials.getUrl());
