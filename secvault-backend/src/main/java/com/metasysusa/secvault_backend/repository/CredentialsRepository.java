@@ -5,9 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface CredentialsRepository extends JpaRepository<Credentials, UUID> {
+public interface CredentialsRepository extends JpaRepository<Credentials, Long> {
     List<Credentials> findByUserId(Long userId);
 }

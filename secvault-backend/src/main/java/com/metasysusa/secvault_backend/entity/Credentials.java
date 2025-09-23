@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -15,13 +13,9 @@ import java.util.UUID;
 public class Credentials {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uniqueidentifier")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long id;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
@@ -29,14 +23,14 @@ public class Credentials {
     @Column(name = "service_name", nullable = false, length = 150)
     private String serviceName;
 
-    @Column(name = "service_url", nullable = false, length = 300)
-    private String serviceUrl;
+    @Column(name = "url", nullable = false, length = 300)
+    private String url;
 
-    @Column(name = "login_name", nullable = false, length = 150)
-    private String loginName;
+    @Column(name = "user_name", nullable = false, length = 150)
+    private String userName;
 
-    @Column(name = "secret_ciphertext", nullable = false, columnDefinition = "NVARCHAR(MAX)")
-    private String secretCiphertext;
+    @Column(name = "password", nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    private String password;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String keywords;
