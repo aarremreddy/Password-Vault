@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Metasys USA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MSAL core library -->
+  <script src="lib/msal-browser.min.js"></script>
+  <!-- Fallback to CDN if local lib missing -->
+  <script>
+    if (!window.msal) {
+      var s = document.createElement("script");
+      s.src = "https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js";
+      document.head.appendChild(s);
+    }
+  </script>
+
+  <!-- App logic (updates #welcome-name / #welcome-message) -->
+  <script type="module" src="script.js"></script>
+</head>
+
+<body class="landing-body">
+  <header class="site-header">
+    <div class="header-images">
+      <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="logo">
+
+      <!-- Removed header-level welcome banner -->
+
+      <!-- Profile Menu -->
+      <div class="profile-menu">
+        <button id="gear-btn" class="gear-btn" type="button" aria-haspopup="true" aria-expanded="false"
+          aria-controls="profile-dropdown" aria-label="Settings">
+          <img src="images/GearBoxImage.png" alt="Settings" class="gear-icon"
+            onerror="this.replaceWith(document.createTextNode('⚙️'))">
+        </button>
+
+        <div id="profile-dropdown" class="profile-dropdown-content" role="menu" hidden>
+          <button class="close-btn" type="button" aria-label="Close menu">&times;</button>
+
+          <div class="profile-header">
+            <div class="profile-avatar" aria-hidden="true">M</div>
+            <!-- This will be updated by script.js -->
+            <p>Hi, <span id="profile-name">Member</span>!</p>
+          </div>
+
+          <a href="Manage-Account.html" target="_blank" class="manage-account-btn" role="menuitem">
+            Manage your Account
+          </a>
+          <a href="login.html" class="logout-link" role="menuitem">Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li class="client-services-wrap">
+          <a href="client-landing.html" class="client-services-bar">
+            <span>Client Services</span>
+            <i class="chev" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="card">
+        <!-- 👇 This is where the personalized name appears -->
+        <h1 class="title" id="welcomeMsg">
+          Welcome <span id="welcome-name">Member</span>
+        </h1>
+
+        <p class="muted">
+          The premier provider of exceptional IT staffing and implementation solutions. We are driven by our deep-rooted
+          passion for technology and our unwavering commitment to excellence.
+        </p>
+        <p class="muted">
+          At Metasys, we empower businesses to not only navigate but thrive in the ever-evolving digital landscape.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+    <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+  </footer>
+</body>
+
+</html>
