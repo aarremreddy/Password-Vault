@@ -8,4 +8,5 @@ public interface CredentialsService {
     Credentials createCredentials(Credentials credentials);
     List<CredentialsDTO> getAllCredentials();
     List<CredentialsDTO> getByUserId(Long userId);
+    String decryptPassword(String encryptedPassword) throws Exception;
 }

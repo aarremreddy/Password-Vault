@@ -22,8 +22,8 @@ public class CredentialsController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Credentials credentials) {
         try {
-            Credentials saved = credentialsService.createCredentials(credentials);
-            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+            credentialsService.createCredentials(credentials);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Create failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
@@ -50,5 +50,17 @@ public class CredentialsController {
         }
         return new ResponseEntity<>(creds, HttpStatus.OK);
     }
+
+    @PostMapping("/decrypt-password")
+    public ResponseEntity<?> decryptPassword(@RequestBody String encryptedPassword) {
+        try {
+            String decryptedPassword = credentialsService.decryptPassword(encryptedPassword);
+            return ResponseEntity.ok(decryptedPassword);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Decrypt failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+        }
+    }
+
 
 }
