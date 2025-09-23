@@ -1,0 +1,20 @@
+{
+    "usersInfo": {
+        "users": [
+            {
+                "userName": "akruth",
+                "password": "akruth123",
+                "email": "akruth@gmail.com"
+            },
+            {
+                "userName": "akshith",
+                "password": "akshith123",
+                "email": "akshith@gmail.com"
+            },
+            {
+                "userName": "admin",
+                "email": "agaddam@metasysusa.com"
+            }
+        ]
+    }
+}
