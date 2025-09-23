@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin-Dashboard</title>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -41,7 +42,7 @@
               <button class="dropdown-btn">&#9660;</button>
             </div>
             <div class="dropdown-content">
-              <a href="https://metasysusa.com/index.html" target="_blank">Our Story</a>
+              <a href="https://metasysusa.com/index.html" target="_blank" rel="noopener">Our Story</a>
               <a href="#">Mission & Vision</a>
               <a href="#">Team</a>
             </div>
@@ -52,7 +53,7 @@
               <button class="dropdown-btn">&#9660;</button>
             </div>
             <div class="dropdown-content">
-              <a href="https://metasysusa.com/service.html" target="_blank">It Staffing</a>
+              <a href="https://metasysusa.com/service.html" target="_blank" rel="noopener">It Staffing</a>
               <a href="#">IT Implementation</a>
               <a href="#">Consultation</a>
             </div>
@@ -63,7 +64,7 @@
               <button class="dropdown-btn">&#9660;</button>
             </div>
             <div class="dropdown-content">
-              <a href="https://metasysusa.com/join-us.html" target="_blank">Career Opportunities</a>
+              <a href="https://metasysusa.com/join-us.html" target="_blank" rel="noopener">Career Opportunities</a>
               <a href="#">Open Positions</a>
               <a href="#">Apply Now</a>
             </div>
@@ -71,18 +72,20 @@
         </ul>
       </nav>
       <main>
-        <main>
-  <div class="search-bar-container">
-    <input type="text" placeholder="Search..." class="search-input">
-    <button class="search-button">search</button>
-  </div>
-</main>
-        </main>
+        <div class="search-bar-container">
+          <input type="text" placeholder="Search..." class="search-input">
+          <button class="search-button">search</button>
+        </div>
+        
+        <div id="users-table-container"></div>
+        
+        <div id="pagination-container" class="pagination-container"></div>
+      </main>
     </div>
 
     <footer>
       <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
-      <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+      <a href="https://metasysusa.com/" class="footer-contact" target="_blank" rel="noopener">Contact Us</a>
     </footer>
     <script src="script.js"></script>
   </body>
