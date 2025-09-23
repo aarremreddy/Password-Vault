@@ -21,3 +21,6 @@ hs_err_pid*
 
 # Spring Boot
 *.log
+
+# Node.js
+node_modules/
