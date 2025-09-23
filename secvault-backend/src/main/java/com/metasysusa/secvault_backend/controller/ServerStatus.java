@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/health-check")
-public class HealthCheck {
+@RequestMapping("/status")
+public class ServerStatus {
 
     @GetMapping
     public String healthCheck() {
