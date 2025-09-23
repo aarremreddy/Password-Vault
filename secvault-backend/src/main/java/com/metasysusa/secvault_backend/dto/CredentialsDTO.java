@@ -6,7 +6,7 @@ import lombok.Data;
 public class CredentialsDTO {
     private Long userId;
     private String serviceName;
-    private String serviceUrl;
+    private String url;
     private String userName;
     private String keywords;
     private String password;

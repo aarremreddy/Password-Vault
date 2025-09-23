@@ -9,7 +9,7 @@ public class CredentialsMapper {
         CredentialsDTO dto = new CredentialsDTO();
         dto.setUserId(credentials.getUserId());
         dto.setServiceName(credentials.getServiceName());
-        dto.setServiceUrl(credentials.getUrl());
+        dto.setUrl(credentials.getUrl());
         dto.setUserName(credentials.getUserName());
         dto.setKeywords(credentials.getKeywords());
         dto.setPassword(credentials.getPassword());
