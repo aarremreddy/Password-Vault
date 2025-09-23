@@ -54,4 +54,66 @@ public class CredentialsServiceImpl implements CredentialsService {
         return encryptor.decrypt(encryptedPassword);
     }
 
+    @Override
+    public List<CredentialsDTO> searchCredentialsByUserId(Long userId, String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return getByUserId(userId);
+        }
+        return credentialsRepository.findByUserIdAndSearchTerm(userId, searchTerm.trim())
+                .stream()
+                .map(CredentialsMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteCredential(Long id, Long userId) {
+        Credentials credential = credentialsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Credential not found"));
+
+        if (!credential.getUserId().equals(userId)) {
+            throw new RuntimeException("Unauthorized to delete this credential");
+        }
+
+        credential.setIsDeleted(true);
+        credential.setUpdatedBy(userId);
+        credentialsRepository.save(credential);
+    }
+
+    @Override
+    public Credentials updateCredential(Long id, Credentials updatedCredentials) {
+        Credentials existing = credentialsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Credential not found"));
+
+        if (!existing.getUserId().equals(updatedCredentials.getUserId())) {
+            throw new RuntimeException("Unauthorized to update this credential");
+        }
+
+        try {
+            // Update fields only if provided, otherwise keep existing
+            if (updatedCredentials.getServiceName() != null) {
+                existing.setServiceName(updatedCredentials.getServiceName());
+            }
+            if (updatedCredentials.getUrl() != null) {
+                existing.setUrl(updatedCredentials.getUrl());
+            }
+            if (updatedCredentials.getUserName() != null) {
+                existing.setUserName(updatedCredentials.getUserName());
+            }
+            if (updatedCredentials.getKeywords() != null) {
+                existing.setKeywords(updatedCredentials.getKeywords());
+            }
+
+            // Only update password if provided, otherwise keep existing
+            if (updatedCredentials.getPassword() != null && !updatedCredentials.getPassword().trim().isEmpty()) {
+                existing.setPassword(encryptor.encrypt(updatedCredentials.getPassword()));
+            }
+
+            existing.setUpdatedBy(updatedCredentials.getUserId());
+
+            return credentialsRepository.save(existing);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to encrypt password", e);
+        }
+    }
+
 }

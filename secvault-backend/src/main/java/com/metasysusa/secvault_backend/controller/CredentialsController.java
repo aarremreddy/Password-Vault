@@ -1,11 +1,14 @@
 package com.metasysusa.secvault_backend.controller;
 
 import com.metasysusa.secvault_backend.dto.CredentialsDTO;
+import com.metasysusa.secvault_backend.dto.SearchRequestDTO;
 import com.metasysusa.secvault_backend.entity.Credentials;
 import com.metasysusa.secvault_backend.service.CredentialsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -20,8 +23,25 @@ public class CredentialsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Credentials credentials) {
+    public ResponseEntity<?> create(@RequestBody Credentials credentials, HttpSession session) {
         try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("User not authenticated");
+            }
+
+            // Set userId from session
+            credentials.setUserId(userId);
+
+            // Validate required fields
+            if (credentials.getServiceName() == null || credentials.getServiceName().trim().isEmpty() ||
+                credentials.getUrl() == null || credentials.getUrl().trim().isEmpty() ||
+                credentials.getUserName() == null || credentials.getUserName().trim().isEmpty() ||
+                credentials.getPassword() == null || credentials.getPassword().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("required fields are missing");
+            }
+
             credentialsService.createCredentials(credentials);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
@@ -31,24 +51,23 @@ public class CredentialsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CredentialsDTO>> getAll() {
-        List<CredentialsDTO> all = credentialsService.getAllCredentials();
-        if (all != null && !all.isEmpty()) {
-            return new ResponseEntity<>(all, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    public ResponseEntity<?> getAll(HttpSession session) {
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("User not authenticated");
+            }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<CredentialsDTO>> getByUserId(@PathVariable Long userId) {
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        List<CredentialsDTO> creds = credentialsService.getByUserId(userId);
-        if (creds.isEmpty()) {
+            List<CredentialsDTO> all = credentialsService.getByUserId(userId);
+            if (all != null && !all.isEmpty()) {
+                return new ResponseEntity<>(all, HttpStatus.OK);
+            }
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Get credentials failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
         }
-        return new ResponseEntity<>(creds, HttpStatus.OK);
     }
 
     @PostMapping("/decrypt-password")
@@ -62,5 +81,58 @@ public class CredentialsController {
         }
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<?> searchCredentials(@RequestBody SearchRequestDTO searchRequest) {
+        try {
+            if (searchRequest.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("userId is required");
+            }
+
+            List<CredentialsDTO> results = credentialsService.searchCredentialsByUserId(
+                    searchRequest.getUserId(),
+                    searchRequest.getSearchTerm()
+            );
+            if (results != null && !results.isEmpty()) {
+                return new ResponseEntity<>(results, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Search failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Credentials credentials) {
+        try {
+            if (credentials.getUserId() == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("userId is required");
+            }
+
+            Credentials updated = credentialsService.updateCredential(id, credentials);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Update failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id, HttpSession session) {
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("User not authenticated");
+            }
+
+            credentialsService.deleteCredential(id, userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Delete failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+        }
+    }
 
 }

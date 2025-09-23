@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CredentialsDTO {
+    private Long id;
     private Long userId;
     private String serviceName;
     private String url;

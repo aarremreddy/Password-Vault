@@ -9,4 +9,7 @@ public interface CredentialsService {
     List<CredentialsDTO> getAllCredentials();
     List<CredentialsDTO> getByUserId(Long userId);
     String decryptPassword(String encryptedPassword) throws Exception;
+    List<CredentialsDTO> searchCredentialsByUserId(Long userId, String searchTerm);
+    void deleteCredential(Long id, Long userId);
+    Credentials updateCredential(Long id, Credentials credentials);
 }
