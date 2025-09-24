@@ -21,7 +21,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Public endpoints
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/health-check").permitAll()
+                        .requestMatchers("/status").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Enable HTTP Basic for quick testing
