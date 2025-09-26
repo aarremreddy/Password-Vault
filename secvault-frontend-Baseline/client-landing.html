@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Metasys USA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="client-landing.css">
+    <script type="module" src="client-landing.js"></script>
+</head>
+
+<body class="landing-body">
+    <header class="site-header">
+        <div class="header-images">
+            <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="logo">
+
+            <div class="profile-menu">
+                <button id="gear-btn" class="gear-btn" type="button" aria-haspopup="true" aria-expanded="false"
+                    aria-label="Settings">
+                    <span class="gear-icon" aria-hidden="true"></span>
+                </button>
+
+
+
+                <div id="profile-dropdown" class="profile-dropdown-content" role="menu">
+                    <button class="close-btn" type="button" aria-label="Close menu">&times;</button>
+
+                    <div class="profile-header">
+                        <div class="profile-avatar" aria-hidden="true">M</div>
+                        <p>Hi, Member!</p>
+                    </div>
+
+                    <a href="Manage-Account.html" target="_blank" class="manage-account-btn" role="menuitem">
+                        Manage your Account
+                    </a>
+                    <!-- use a link, not a button inside a link -->
+                    <a href="login.html" class="logout-link" role="menuitem">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="site-nav" aria-label="Primary">
+            <ul class="side-nav">
+                <li class="client-services-wrap">
+                    <a href="#client-services" class="client-services-bar">
+                        <span>Client Services</span>
+                        <i class="chev" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main>
+            <div class="wrap">
+                <header class="card">
+                    <div class="search-center">
+                        <input id="searchName" type="search" placeholder="Search by name…">
+                        <button id="searchBtn" class="btn" type="button">Search</button>
+                        <label for="perPage">Per page</label>
+                        <select id="perPage">
+                            <option>5</option>
+                            <option selected>10</option>
+                            <option>15</option>
+                            <option>20</option>
+                        </select>
+                    </div>
+
+                </header>
+                <section class="card">
+                    <div class="toolbar">
+                        <div class="fw-600">Results</div>
+                        <div id="resultMeta" class="muted"></div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table id="dataTable" class="users-table" aria-label="User services table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">SERVICE NAME</th>
+                                    <th scope="col">URL</th>
+                                    <th scope="col">USERNAME / EMAIL</th>
+                                    <th class="w-260" scope="col">PASSWORD</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr>
+                                    <td colspan="6" class="empty">Search for a user to load data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination" id="pager" hidden>
+                        <button class="page-btn" id="prevBtn" type="button">&lt; Back</button>
+                        <span class="page-num" id="pageInfo">Page 1 of 1</span>
+                        <button class="page-btn" id="nextBtn" type="button">Next &gt;</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+        <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+    </footer>
+
+    
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+/* =========================
+   ADMIN.HTML STYLES
+   ========================= */
+
+/* Admin specific colors and layout */
+.dashboard-container {
+    display: flex;
+    flex: 1;
+}
+
+nav {
+    width: 200px;
+    background: #6aa8f5;
+    color: #fff;
+    min-height: 400px;
+    padding-top: 30px;
+}
+
+nav ul li:hover {
+    background: #2875D8;
+}
+
+.profile-avatar {
+    background-color: #7B1FA2;
+    color: #fff;
+    /* ... (rest of the avatar styles) ... */
+}
+
+/* Admin table styles */
+.admin-table {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 35px;
+}
+
+.admin-table table {
+    width: 80%;
+    margin: 20px auto 0;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ... (the rest of the admin-specific table styles) ... */
