@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manage Account - Metasys USA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="lib/msal-browser.min.js"></script>
+    <script>
+      if (!window.msal) {
+        var s = document.createElement("script");
+        s.src =
+          "https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js";
+        document.head.appendChild(s);
+      }
+    </script>
+    <script type="module" src="script.js"></script>
+  </head>
+  <body class="landing-body">
+    <header class="site-header">
+      <div class="header-images">
+        <img
+          src="https://metasysusa.com/images/logo.svg"
+          alt="Metasys USA Logo"
+          class="logo"
+        />
+        <div class="profile-menu">
+          <div
+            id="profile-icon-btn"
+            class="profile-icon-btn"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="profile-dropdown"
+            tabindex="0"
+            role="button"
+            aria-label="User account menu"
+          >
+            <div class="profile-avatar">M</div>
+          </div>
+          <div id="profile-dropdown" class="profile-dropdown-content" hidden>
+            <div class="profile-header">
+              <p id="profile-email" class="muted fw-600">user@example.com</p>
+              <div class="profile-avatar-large" id="profile-avatar-large">
+                M
+              </div>
+              <p id="welcome-message">Hi, Member!</p>
+            </div>
+            <div class="profile-links">
+              <a href="manage-account.html" class="profile-link"
+                >Manage your account</a
+              >
+              <a href="login.html" class="profile-link logout">Sign out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="dashboard-container">
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li>
+            <a href="#" class="nav-link" id="home-link">
+              <i class="fas fa-home"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" id="personal-info-link">
+              <i class="fas fa-user"></i>
+              <span>Personal info</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" id="about-link">
+              <i class="fas fa-info-circle"></i>
+              <span>About</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <main>
+        <div id="dashboard-content">
+          <section class="card" id="home-section">
+            <h1 class="title">Welcome!</h1>
+            <p>
+              Welcome to your Metasys Account dashboard. Use the navigation to
+              the left to manage your information.
+            </p>
+          </section>
+
+          <section class="card hidden" id="personal-info-section">
+            <div class="personal-info-header">
+              <h1 class="title">Personal Information</h1>
+              <p class="muted">
+                Your Profile in Metasys Services. You can manage and update your
+                details here.
+              </p>
+            </div>
+
+            <div class="info-group-card">
+              <h2>Basic info</h2>
+              <div class="info-list">
+                <div class="info-item profile-photo">
+                  <div class="item-title">
+                    <span>Profile picture</span>
+                  </div>
+                  <div class="item-content">
+                    <img
+                      src="path/to/placeholder/image.jpg"
+                      alt="Profile"
+                      class="profile-avatar-small"
+                    />
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <span class="item-title">Name</span>
+                  <span class="item-content" id="user-name"></span>
+                  <i class="fas fa-chevron-right"></i>
+                </div>
+
+                <div class="info-item">
+                  <span class="item-title">Birthday</span>
+                  <span class="item-content" id="user-birthday"></span>
+                  <i class="fas fa-chevron-right"></i>
+                </div>
+
+                <div class="info-item">
+                  <span class="item-title">Gender</span>
+                  <span class="item-content" id="user-gender"></span>
+                  <i class="fas fa-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-group-card">
+              <h2>Contact info</h2>
+              <div class="info-item">
+                <span class="item-title">Phone Number</span>
+                <span class="item-content" id="user-phone-number"></span>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+              <div class="info-item">
+                <span class="item-title">Email</span>
+                <span class="item-content" id="user-email"></span>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </div>
+
+            <div class="info-group-card">
+              <h2>Addresses</h2>
+              <div class="info-item">
+                <span class="item-title">Home address</span>
+                <span class="item-content" id="user-home-address"></span>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+              <div class="info-item">
+                <span class="item-title">Work address</span>
+                <span class="item-content" id="user-work-address"></span>
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </div>
+          </section>
+
+          <section class="card hidden" id="about-section">
+            <h1 class="title">About Metasys USA</h1>
+            <p>
+              Here you can find information about our company, mission, and
+              team.
+            </p>
+          </section>
+        </div>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+      <a href="https://metasysusa.com/" class="footer-contact" target="_blank"
+        >Contact Us</a
+      >
+    </footer>
+  </body>
+</html>
