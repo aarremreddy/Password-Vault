@@ -1,0 +1,52 @@
+{
+    "personalInfo": [
+        {
+            "name": "Alice Smith",
+            "contactInfo": "alice@example.com",
+            "birthday": "1988-03-13",
+            "gender": "Male"
+        },
+        {
+            "name": "Sai chiruvolu",
+            "contactInfo": "schiruvolu@metasysusa.com",
+            "birthday": "2000-05-18",
+            "gender": "Female"
+        },
+        {
+            "name": "Charlie Brown",
+            "contactInfo": "charlie@example.com",
+            "birthday": "1987-02-24",
+            "gender": "Male"
+        },
+        {
+            "name": "Sai Kiran",
+            "contactInfo": "skotha@metasysusa.com",
+            "birthday": "1999-08-27",
+            "gender": "Male"
+        },
+        {
+            "name": "Ethan Hunt",
+            "contactInfo": "ethan@example.com",
+            "birthday": "1985-08-25",
+            "gender": "Male"
+        },
+        {
+            "name": "Akshith Reddy",
+            "contactInfo": "aarremreddy@metasysusa.com",
+            "birthday": "1984-09-06",
+            "gender": "Male"
+        },
+        {
+            "name": "Akruth Gaddam",
+            "contactInfo": "agaddam@metasysusa.com",
+            "birthday": "1997-08-04",
+            "gender": "Male"
+        },
+        {
+            "name": "Rohith Panjala",
+            "contactInfo": "rpanjala@metasysusa.com",
+            "birthday": "1998-07-16",
+            "gender": "Male"
+        }
+    ]
+}

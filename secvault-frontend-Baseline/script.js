@@ -6,9 +6,11 @@ const isLogin = page === "" || page === "index.html" || page === "login.html";
 const isLanding = page === "landing.html";
 const isClientLanding = page === "client-landing.html";
 const isAdmin = page === "admin.html";
+const isManageAccount = page === "manage-account.html";
 
 /* ---------- Small helpers ---------- */
 const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
 function showAlert(msg) {
     const alertWindow = $("#alertWindow");
@@ -194,6 +196,55 @@ async function resolveDisplayName(msalInstance) {
     } catch { }
 
     return "";
+}
+
+async function getUserEmail(msalInstance) {
+    try {
+        const activeAccount = msalInstance?.getActiveAccount?.() || (msalInstance?.getAllAccounts?.() || [])[0];
+        return activeAccount?.username || sessionStorage.getItem("loginUserEmail") || "";
+    } catch (e) {
+        console.error("Could not get user email from MSAL:", e);
+        return sessionStorage.getItem("loginUserEmail") || "";
+    }
+}
+//---------- Update profile UI ----------
+async function updateProfileUI(msalInstance) {
+    try {
+        const displayName = await resolveDisplayName(msalInstance);
+        const userEmail = await getUserEmail(msalInstance);
+        const profileIconButton = document.getElementById("profile-icon-btn");
+
+        if (profileIconButton && displayName) {
+            profileIconButton.setAttribute("title", `Account manager for ${displayName}`);
+        }
+
+        // Only update welcome message on landing page
+        if (isLanding) {
+            const welcomeEl = document.getElementById("welcomeMsg");
+            if (welcomeEl) welcomeEl.textContent = `Welcome ${displayName}!`;
+        }
+
+        const profileEmailEl = document.getElementById("profile-email");
+        if (profileEmailEl) profileEmailEl.textContent = userEmail;
+
+        const profileLargeAvatarEl = document.getElementById("profile-avatar-large");
+        if (profileLargeAvatarEl && displayName) {
+            profileLargeAvatarEl.textContent = displayName.charAt(0).toUpperCase();
+        }
+
+        const profileSmallAvatarEl = document.querySelector(".profile-icon-btn .profile-avatar");
+        if (profileSmallAvatarEl && displayName) {
+            profileSmallAvatarEl.textContent = displayName.charAt(0).toUpperCase();
+        }
+
+        const profileWelcomeMsgEl = document.getElementById("welcome-message");
+        if (profileWelcomeMsgEl && displayName) {
+            profileWelcomeMsgEl.textContent = `Hi, ${displayName}!`;
+        }
+
+    } catch (e) {
+        console.warn("Could not update profile UI:", e);
+    }
 }
 
 function applyWelcomeName(name) {
@@ -660,3 +711,80 @@ document.addEventListener("DOMContentLoaded", async () => {
         loadUsersTable();
     }
 });
+
+//gearbox-personlinfo
+// Find all navigation links and content sections
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('.card');
+
+// Function to fetch and display personal information
+async function loadPersonalInfo() {
+    try {
+        // Fetch the JSON file
+        const response = await fetch('personal_info.json');
+
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse the JSON data
+        const data = await response.json();
+
+        // Display the first user's information as an example
+        if (data.personalInfo && data.personalInfo.length > 0) {
+            const user = data.personalInfo[0];
+
+            // Update the content of the existing HTML elements
+            document.getElementById('user-name').textContent = user.name;
+            document.getElementById('user-birthday').textContent = user.birthday;
+            document.getElementById('user-gender').textContent = user.gender;
+            document.getElementById('user-contact').textContent = user.contactInfo;
+        } else {
+            // Clear the content if no data is found
+            document.getElementById('user-name').textContent = '';
+            document.getElementById('user-birthday').textContent = '';
+            document.getElementById('user-gender').textContent = '';
+            document.getElementById('user-contact').textContent = '';
+        }
+
+    } catch (error) {
+        console.error('Error loading personal information:', error);
+    }
+}
+
+// Main function to show the correct section and highlight the active link
+function showSection(sectionId) {
+    sections.forEach(section => section.classList.add('hidden'));
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+    }
+
+    navLinks.forEach(link => link.classList.remove('active'));
+    const activeLink = document.querySelector(`[id="${sectionId.replace('-section', '-link')}"]`);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
+}
+
+// Add click event listeners to navigation links
+navLinks.forEach(link => {
+    link.addEventListener('click', function (event) {
+        event.preventDefault();
+        const targetId = this.id.replace('-link', '-section');
+        showSection(targetId);
+        // Load user data only if the personal info section is being shown
+        if (targetId === 'personal-info-section') {
+            loadPersonalInfo();
+        }
+    });
+});
+
+// Set the default view on page load
+showSection('home-section');
+
+if (isLanding || isManageAccount) {
+    await updateProfileUI(msalInstance);
+}
+
