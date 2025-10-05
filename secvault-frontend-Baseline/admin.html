@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin-Dashboard</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="admin.css" />
+    <!-- <link rel="stylesheet" href="admin.css" /> -->
     <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"
         onerror="var s=document.createElement('script'); s.src='lib/msal-browser.min.js'; document.head.appendChild(s);"
         defer></script>
     <script type="module" src="script.js" defer></script>
 </head>
 
-<body class="landing-body">
-    <header>
-        <div class="header-images">
-            <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="logo" />
+<body class="dashboard-page">
+    <header class="site-header">
+        <div class="site-header__content">
+            <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="site-logo" />
             <div class="profile-menu">
                 <button id="gear-btn" class="gear-btn">
                     <img src="images/GearBoxImage.png" alt="Settings" class="gear-icon" />
@@ -29,44 +29,44 @@
                     </div>
                     <a href="Manage-Account.html" class="manage-account-btn">Manage your Account</a>
                     <a href="login.html" class="logout-link">
-                        <button class="logout-button">Logout</button>
+                        <button class="btn--logout">Logout</button>
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="dashboard-container">
-        <nav>
+    <div class="dashboard-layout">
+        <nav class="site-nav">
             <ul>
                 <li>
-                    <div class="nav-item-header">
+                    <div class="nav-item__header">
                         <span>About</span>
-                        <button class="dropdown-btn">&#9660;</button>
+                        <button class="nav-item__dropdown-btn">&#9660;</button>
                     </div>
-                    <div class="dropdown-content">
+                    <div class="nav-item__dropdown">
                         <a href="https://metasysusa.com/index.html" target="_blank" rel="noopener">Our Story</a>
                         <a href="#">Mission & Vision</a>
                         <a href="#">Team</a>
                     </div>
                 </li>
                 <li>
-                    <div class="nav-item-header">
+                    <div class="nav-item__header">
                         <span>Services</span>
-                        <button class="dropdown-btn">&#9660;</button>
+                        <button class="nav-item__dropdown-btn">&#9660;</button>
                     </div>
-                    <div class="dropdown-content">
+                    <div class="nav-item__dropdown">
                         <a href="https://metasysusa.com/service.html" target="_blank" rel="noopener">It Staffing</a>
                         <a href="#">IT Implementation</a>
                         <a href="#">Consultation</a>
                     </div>
                 </li>
                 <li>
-                    <div class="nav-item-header">
+                    <div class="nav-item__header">
                         <span>Join Us</span>
-                        <button class="dropdown-btn">&#9660;</button>
+                        <button class="nav-item__dropdown-btn">&#9660;</button>
                     </div>
-                    <div class="dropdown-content">
+                    <div class="nav-item__dropdown">
                         <a href="https://metasysusa.com/join-us.html" target="_blank" rel="noopener">Career
                             Opportunities</a>
                         <a href="#">Open Positions</a>
@@ -78,10 +78,12 @@
         <main>
             <div class="search-bar-container">
                 <input type="text" placeholder="Search..." class="search-input" />
-                <button class="search-button">search</button>
+                <button class="btn--search">search</button>
             </div>
 
-            <div id="users-table-container"></div>
+            <div class="table-wrap">
+                <div id="users-table-container"></div>
+            </div>
 
             <div id="pagination-container" class="pagination-container"></div>
         </main>

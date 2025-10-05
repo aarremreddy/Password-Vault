@@ -207,39 +207,42 @@ async function getUserEmail(msalInstance) {
         return sessionStorage.getItem("loginUserEmail") || "";
     }
 }
+
 //---------- Update profile UI ----------
 async function updateProfileUI(msalInstance) {
     try {
         const displayName = await resolveDisplayName(msalInstance);
-        const userEmail = await getUserEmail(msalInstance);
-        const profileIconButton = document.getElementById("profile-icon-btn");
 
-        if (profileIconButton && displayName) {
-            profileIconButton.setAttribute("title", `Account manager for ${displayName}`);
+        // This is the element inside the profile dropdown that currently says "Hi, Member!"
+        const profileWelcomeMsgEl = document.querySelector("#profile-dropdown .profile-header p");
+
+        if (displayName) {
+            // Update the name in the profile dropdown
+            if (profileWelcomeMsgEl) {
+                // Use innerHTML to update the span inside the p tag
+                profileWelcomeMsgEl.innerHTML = `Hi, <span id="profile-name">${displayName}</span>!`;
+            }
+
+            // Update the avatar initial
+            const profileAvatarEl = document.querySelector("#profile-dropdown .profile-avatar");
+            if (profileAvatarEl) {
+                profileAvatarEl.textContent = displayName.charAt(0).toUpperCase();
+            }
         }
 
-        // Only update welcome message on landing page
-        if (isLanding) {
-            const welcomeEl = document.getElementById("welcomeMsg");
-            if (welcomeEl) welcomeEl.textContent = `Welcome ${displayName}!`;
-        }
+        // Additional profile updates (Manage Account sidebar links/icons)
+        // This is necessary because the Manage Account page uses a different sidebar structure
+        if (isManageAccount) {
+            const manageAccountAvatar = document.querySelector(".site-nav .profile-avatar");
+            if (manageAccountAvatar && displayName) {
+                manageAccountAvatar.textContent = displayName.charAt(0).toUpperCase();
+            }
 
-        const profileEmailEl = document.getElementById("profile-email");
-        if (profileEmailEl) profileEmailEl.textContent = userEmail;
-
-        const profileLargeAvatarEl = document.getElementById("profile-avatar-large");
-        if (profileLargeAvatarEl && displayName) {
-            profileLargeAvatarEl.textContent = displayName.charAt(0).toUpperCase();
-        }
-
-        const profileSmallAvatarEl = document.querySelector(".profile-icon-btn .profile-avatar");
-        if (profileSmallAvatarEl && displayName) {
-            profileSmallAvatarEl.textContent = displayName.charAt(0).toUpperCase();
-        }
-
-        const profileWelcomeMsgEl = document.getElementById("welcome-message");
-        if (profileWelcomeMsgEl && displayName) {
-            profileWelcomeMsgEl.textContent = `Hi, ${displayName}!`;
+            // Highlight the correct initial link
+            const homeLink = document.getElementById('home-link');
+            if (homeLink) {
+                homeLink.classList.add('active'); // Set 'Home' as the default active link
+            }
         }
 
     } catch (e) {
@@ -293,7 +296,8 @@ function renderTable() {
     const endIndex = startIndex + usersPerPage;
     const usersToDisplay = filteredUsers.slice(startIndex, endIndex);
 
-    let tableHTML = '<table><thead><tr><th>User Name</th><th>User ID</th><th>Email</th><th>Total Credentials</th><th>Active Credentials</th><th>Inactive Credentials</th><th>User Status</th></tr></thead><tbody>';
+    // CRITICAL FIX: Ensure table has the class for shared styling
+    let tableHTML = '<table class="users-table"><thead><tr><th>User Name</th><th>User ID</th><th>Email</th><th>Total Credentials</th><th>Active Credentials</th><th>Inactive Credentials</th><th>User Status</th></tr></thead><tbody>';
 
     usersToDisplay.forEach(user => {
         tableHTML += `
@@ -697,7 +701,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await ensureAuthenticated(msalInstance);
     }
 
-    // Dynamic welcome for landing pages and Akruth's admin page functionality
+    // Dynamic welcome for landing pages
     if (isLanding || isClientLanding) {
         try {
             const name = await resolveDisplayName(msalInstance);
@@ -706,6 +710,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.warn("Could not resolve display name:", e);
         }
     }
+
+    // CRITICAL FIX FOR MANAGE ACCOUNT PAGE: Ensure profile UI updates after auth
+    if (!isLogin) {
+        await updateProfileUI(msalInstance);
+    }
+
 
     if (isAdmin) {
         loadUsersTable();
@@ -719,34 +729,41 @@ const sections = document.querySelectorAll('.card');
 
 // Function to fetch and display personal information
 async function loadPersonalInfo() {
-    try {
-        // Fetch the JSON file
-        const response = await fetch('personal_info.json');
+    // This function will need to be updated to fetch data for the *logged-in* user,
+    // not just the first user in a static file.
 
-        // Check if the request was successful
+    const activeUserId = sessionStorage.getItem("loginUserId");
+
+    if (!activeUserId) {
+        console.warn("Cannot load personal info: User ID not found.");
+        return;
+    }
+
+    try {
+        // Fetch usersdata.json (assuming personal info is nested here)
+        const response = await fetch('usersdata.json');
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Parse the JSON data
         const data = await response.json();
 
-        // Display the first user's information as an example
-        if (data.personalInfo && data.personalInfo.length > 0) {
-            const user = data.personalInfo[0];
+        // Find the specific user's personal info
+        const users = data?.usersInfo?.users || [];
+        const user = users.find(u => String(u.userId) === activeUserId);
 
+        // This is where you would look for a separate personalInfo array if it existed
+        // For now, we use the user details from usersInfo/users
+
+        if (user) {
             // Update the content of the existing HTML elements
-            document.getElementById('user-name').textContent = user.name;
-            document.getElementById('user-birthday').textContent = user.birthday;
-            document.getElementById('user-gender').textContent = user.gender;
-            document.getElementById('user-contact').textContent = user.contactInfo;
-        } else {
-            // Clear the content if no data is found
-            document.getElementById('user-name').textContent = '';
-            document.getElementById('user-birthday').textContent = '';
-            document.getElementById('user-gender').textContent = '';
-            document.getElementById('user-contact').textContent = '';
+            document.getElementById('user-name').textContent = `${user.firstName} ${user.lastName}`;
+            // NOTE: Birthday, Gender, etc., are missing from the usersdata.json structure you provided, 
+            // so these will remain blank until you update your JSON source.
+            document.getElementById('user-email').textContent = user.email;
         }
+        // ... (rest of the error handling and loading logic) ...
 
     } catch (error) {
         console.error('Error loading personal information:', error);
@@ -783,8 +800,3 @@ navLinks.forEach(link => {
 
 // Set the default view on page load
 showSection('home-section');
-
-if (isLanding || isManageAccount) {
-    await updateProfileUI(msalInstance);
-}
-

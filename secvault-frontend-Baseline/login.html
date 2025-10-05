@@ -16,38 +16,38 @@
     <script type="module" src="script.js" defer></script>
 </head>
 
-<body class="login-body">
+<body class="login-page">
     <div id="signinOverlay" class="overlay hide" style="display:none">Signing you in…</div>
-    <div class="login-page-content">
-        <div class="intro-section">
-            <h1 class="logo-text">METASYS USA</h1>
-            <h2 class="tagline">The Professional IT Staffing</h2>
+    <div class="login-page__content">
+        <div class="login-page__intro">
+            <h1 class="login-page__logo">METASYS USA</h1>
+            <h2 class="login-page__tagline">The Professional IT Staffing</h2>
         </div>
 
-        <div class="login-container">
+        <div class="login-card">
             <form id="loginForm" novalidate>
-                <input id="username" class="field" type="text" placeholder="Username" autocomplete="username">
-                <input id="password" class="field" type="password" placeholder="Password"
+                <input id="username" class="form-field" type="text" placeholder="Username" autocomplete="username">
+                <input id="password" class="form-field" type="password" placeholder="Password"
                     autocomplete="current-password">
 
-                <button class="login-button" type="submit">Login</button>
+                <button class="btn btn--primary" type="submit">Login</button>
 
-                <a href="#" class="forgot-password-link">Forgot password?</a>
-                <div class="divider"></div>
+                <a href="#" class="login-card__forgot-link">Forgot password?</a>
+                <div class="login-card__divider"></div>
 
-                <button id="ms-login" type="button" class="login-button">Login with Microsoft</button>
+                <button id="ms-login" type="button" class="btn--microsoft">Login with Microsoft</button>
 
                 <br>
-                <button type="button" class="create-account-button">Create new account</button>
+                <button type="button" class="btn--create-account">Create new account</button>
             </form>
         </div>
     </div>
 
-    <div id="alertWindow" class="alert" role="dialog" aria-modal="true" aria-labelledby="alertTitle">
-        <div class="alert-content">
-            <button type="button" class="close-btn" aria-label="Close">&times;</button>
+    <div id="alertWindow" class="modal" role="dialog" aria-modal="true" aria-labelledby="alertTitle">
+        <div class="modal__content">
+            <button type="button" class="modal__close-btn" aria-label="Close">&times;</button>
             <p id="errorMessage">Something went wrong</p>
-            <button id="okBtn" type="button" class="alert-ok-btn">OK</button>
+            <button id="okBtn" type="button" class="btn--alert">OK</button>
         </div>
     </div>
 </body>

@@ -13,18 +13,31 @@ const norm = (v) => String(v ?? "").toLowerCase();
 const paginate = (items, page, size) =>
   items.slice((page - 1) * size, (page - 1) * size + size);
 
-// ----- page chrome (menus/dropdowns) -----
+// --- debounce helper (for smooth live search) ---
+function debounce(func, delay = 200) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+// ----- MAIN EXECUTION BLOCK (Consolidated) -----
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ===================================
+  // PAGE CHROME (Menus/Dropdowns)
+  // ===================================
   const navDropdownBtns = document.querySelectorAll(".nav-item-header");
   const tableDropdownBtns = document.querySelectorAll(".table-dropdown-btn");
   const profileDropdown = document.getElementById("profile-dropdown");
   const gearBtn = document.getElementById("gear-btn");
 
   function closeAllDropdowns() {
-    document.querySelectorAll(".dropdown-content.open").forEach((d) => {
+    document.querySelectorAll(".nav-item__dropdown.open").forEach((d) => {
       d.classList.remove("open");
-      const btn = d.closest("li")?.querySelector(".dropdown-btn");
-      if (btn) btn.classList.remove("rotated");
+      const btn = d.closest("li")?.querySelector(".nav-item__dropdown-btn");
+      if (btn) btn.classList.remove("nav-item__dropdown-btn--rotated");
     });
     if (profileDropdown) profileDropdown.classList.remove("show");
   }
@@ -33,12 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const li = btn.closest("li");
-      const dd = li?.querySelector(".dropdown-content");
+      // NOTE: Adjusted class names for dropdowns/buttons based on your Admin HTML
+      const dd = li?.querySelector(".nav-item__dropdown");
+      const icon = btn.querySelector(".nav-item__dropdown-btn");
       const isOpen = dd?.classList.contains("open");
       closeAllDropdowns();
       if (dd && !isOpen) {
         dd.classList.add("open");
-        btn.querySelector(".dropdown-btn")?.classList.add("rotated");
+        icon?.classList.add("nav-item__dropdown-btn--rotated");
       }
     })
   );
@@ -63,10 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.addEventListener("click", closeAllDropdowns);
-});
 
-// ----- client-only table -----
-(function () {
+
+  // ===================================
+  // CLIENT-ONLY TABLE LOGIC
+  // CRITICAL: All DOM elements are safe to query now.
+  // ===================================
+
   const searchBtn = document.getElementById("searchBtn");
   const searchInput = document.getElementById("searchName");
   const perPageSel = document.getElementById("perPage");
@@ -77,22 +95,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = document.getElementById("nextBtn");
   const resultMeta = document.getElementById("resultMeta");
 
-  if (!tbody) return;
+  // If the required table elements aren't here (e.g., if we are on landing.html), stop cleanly.
+  if (!tbody || !searchInput) return;
 
-  let ALL = []; // all services from usersdata.json
-  let MINE = []; // this user's services
-  let VIEW = []; // filtered view
+  let ALL = [];
+  let MINE = [];
+  let VIEW = [];
   let currentPage = 1;
+  // Set initial perPage value from the select element
   let perPage = parseInt(perPageSel?.value || "10", 10) || 10;
-
-  // --- debounce helper (for smooth live search) ---
-  function debounce(func, delay = 200) {
-    let timeout;
-    return function (...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), delay);
-    };
-  }
 
   function render() {
     const total = VIEW.length;
@@ -110,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // (Optional) header click sorting — attach once per render safely
+    // --- Sorting Logic (Safe to run inside DCL) ---
     let currentSort = { key: null, asc: true };
     function sortData(key) {
       currentSort.asc = currentSort.key === key ? !currentSort.asc : true;
@@ -124,47 +135,39 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       render();
     }
-    document.querySelectorAll("th[data-sort]").forEach((th) => {
-      // avoid double-binding: remove old then add new
+    document.querySelectorAll("#dataTable th[data-sort]").forEach((th) => {
+      // Re-clone/re-bind event listeners safely
       th.replaceWith(th.cloneNode(true));
     });
-    document.querySelectorAll("th[data-sort]").forEach((th) => {
+    document.querySelectorAll("#dataTable th[data-sort]").forEach((th) => {
       th.addEventListener("click", () => sortData(th.dataset.sort));
     });
 
+    // --- Render Rows ---
     const pageItems = paginate(VIEW, currentPage, perPage);
     tbody.innerHTML = pageItems
       .map((row) => {
         const urlLabel = row.url ? row.url.replace(/^https?:\/\//, "") : "";
         return `
-          <tr>
-            <td>${escapeHtml(row.serviceName || "-")}</td>
-            <td>${
-              row.url
-                ? `<a href="${escapeAttr(
-                    row.url
-                  )}" target="_blank" rel="noopener">${escapeHtml(
-                    urlLabel
-                  )}</a>`
-                : "-"
-            }</td>
-            <td class="mono">${escapeHtml(
-              row.login || row.userName || "-"
-            )}</td>
-            <td>
-              <div class="pw">
-                <input type="password" value="${escapeAttr(
-                  row.password || ""
-                )}" readonly />
-                <button class="icon-btn" title="Show/Hide" aria-label="Toggle password" data-eye>👁️</button>
-                <button class="icon-btn" title="Copy" aria-label="Copy password" data-copy>📋</button>
-              </div>
-            </td>
-          </tr>`;
+                <tr>
+                    <td>${escapeHtml(row.serviceName || "-")}</td>
+                    <td>${row.url
+            ? `<a href="${escapeAttr(row.url)}" target="_blank" rel="noopener">${escapeHtml(urlLabel)}</a>`
+            : "-"
+          }</td>
+                    <td class="mono">${escapeHtml(row.login || row.userName || "-")}</td>
+                    <td>
+                        <div class="pw">
+                            <input type="password" value="${escapeAttr(row.password || "")}" readonly />
+                            <button class="icon-btn" title="Show/Hide" aria-label="Toggle password" data-eye>👁️</button>
+                            <button class="icon-btn" title="Copy" aria-label="Copy password" data-copy>📋</button>
+                        </div>
+                    </td>
+                </tr>`;
       })
       .join("");
 
-    // Show/Hide password
+    // --- Bind Password Actions ---
     tbody.querySelectorAll("[data-eye]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const input = btn.parentElement.querySelector("input");
@@ -172,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Copy to clipboard
     tbody.querySelectorAll("[data-copy]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const input = btn.parentElement.querySelector("input");
@@ -183,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // pager
+    // --- Render Pager ---
     pager.hidden = false;
     pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
     prevBtn.disabled = currentPage === 1;
@@ -194,10 +196,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const t = norm(q);
     VIEW = t
       ? MINE.filter((r) =>
-          [r.serviceName, r.url, r.login || r.userName, r.password]
-            .map(norm)
-            .some((h) => h.includes(t))
-        )
+        [r.serviceName, r.url, r.login || r.userName, r.password]
+          .map(norm)
+          .some((h) => h.includes(t))
+      )
       : MINE.slice();
     currentPage = 1;
     render();
@@ -206,52 +208,33 @@ document.addEventListener("DOMContentLoaded", () => {
   // Determine who is logged in → return { userId, email, name }
   async function resolveActiveUser(meta) {
     const fromSessionId = sessionStorage.getItem("loginUserId");
-    const fromSessionName = sessionStorage.getItem("loginUser"); // e.g., "Alice Smith"
+    const fromSessionName = sessionStorage.getItem("loginUser");
     let emailFromMsal = null;
 
-    // If MSAL is available and an account exists, prefer that email
     try {
+      // Dummy initialization just to check for active account
       if (window.msal && typeof msal.PublicClientApplication === "function") {
-        const app = new msal.PublicClientApplication({
-          auth: { clientId: "dummy" },
-        }); // safe no-op
-        const acct =
-          app.getActiveAccount?.() || (app.getAllAccounts?.() || [])[0];
+        const app = new msal.PublicClientApplication({ auth: { clientId: "dummy" } });
+        const acct = app.getActiveAccount?.() || (app.getAllAccounts?.() || [])[0];
         emailFromMsal = acct?.username || null;
       }
-    } catch {
-      /* ignore - msal optional here */
-    }
+    } catch { /* ignore - msal optional here */ }
 
     const users = meta?.usersInfo?.users || [];
+    // Match 1: Session ID (Local Login)
     if (fromSessionId) {
       const hit = users.find((u) => String(u.userId) === String(fromSessionId));
-      if (hit)
-        return {
-          userId: String(hit.userId),
-          email: hit.email,
-          name: hit.userName,
-        };
+      if (hit) return { userId: String(hit.userId), email: hit.email, name: hit.userName };
     }
+    // Match 2: MSAL Email (Microsoft Login)
     if (emailFromMsal) {
       const hit = users.find((u) => norm(u.email) === norm(emailFromMsal));
-      if (hit)
-        return {
-          userId: String(hit.userId),
-          email: hit.email,
-          name: hit.userName,
-        };
+      if (hit) return { userId: String(hit.userId), email: hit.email, name: hit.userName };
     }
+    // Match 3: Session Name (Fallback)
     if (fromSessionName) {
-      const hit = users.find((u) =>
-        norm(u.userName).includes(norm(fromSessionName))
-      );
-      if (hit)
-        return {
-          userId: String(hit.userId),
-          email: hit.email,
-          name: hit.userName,
-        };
+      const hit = users.find((u) => norm(u.userName).includes(norm(fromSessionName)));
+      if (hit) return { userId: String(hit.userId), email: hit.email, name: hit.userName };
     }
     return null;
   }
@@ -260,14 +243,13 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch("usersdata.json", { cache: "no-store" });
       if (!res.ok) throw new Error(`Failed to load usersdata.json (${res.status})`);
-      const data = await res.json(); // has usersInfo + userCredentials
+      const data = await res.json();
 
-      // Normalize all credentials
+      // Normalize all credentials (Adjusted property access for robustness)
       const raw =
         data?.userCredentials?.userCredentialsInfo ??
-        data?.records ??
-        data ??
         [];
+
       ALL = (Array.isArray(raw) ? raw : []).map((r) => ({
         userId: String(r.userId || "").trim(),
         serviceName: String(r.serviceName || "").trim(),
@@ -278,52 +260,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const active = await resolveActiveUser(data);
       if (!active || !active.userId) {
-        // No login? back to login page
-        window.location.href = "login.html";
+        // No login? back to login page (should be caught by main script.js)
         return;
       }
 
       // Filter to this user's services only
       MINE = ALL.filter((r) => String(r.userId) === String(active.userId));
 
-      // Show their name in the profile header, if present
-      // After resolving the active user
+      // Show their name in the profile header (assuming this is only for client page)
       const profileHeader = document.querySelector(".profile-header p");
       const profileAvatar = document.querySelector(".profile-avatar");
 
       if (active && active.name) {
-        // Set greeting
         profileHeader.textContent = `Hi, ${active.name}!`;
-
-        // Take the first letter of the user's name
         const initial = active.name.trim().charAt(0).toUpperCase();
         profileAvatar.textContent = initial;
       }
 
-      // First render
+      // First render: Apply filter (which calls render)
       applyFilter(searchInput?.value || "");
     } catch (err) {
-      console.error(err);
+      console.error("Client-Landing Boot Error:", err);
       tbody.innerHTML =
-        '<tr><td colspan="6" class="empty">Could not load usersdata.json</td></tr>';
+        '<tr><td colspan="6" class="empty">Could not load services data.</td></tr>';
       pager.hidden = true;
     }
   }
 
-  // ---------- LIVE SEARCH (debounced) ----------
+  // ---------- Event Listeners ----------
   const handleSearch = () => applyFilter(searchInput.value);
   const debouncedSearch = debounce(handleSearch, 200);
 
-  // Live results as you type (like your friend’s)
   searchInput?.addEventListener("input", debouncedSearch);
-
-  // Optional: still allow Enter and Search button
   searchInput?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleSearch();
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch();
+    }
   });
   searchBtn?.addEventListener("click", handleSearch);
 
-  // ---------- Pagination ----------
   perPageSel?.addEventListener("change", () => {
     perPage = parseInt(perPageSel.value, 10) || 10;
     currentPage = 1;
@@ -338,5 +314,6 @@ document.addEventListener("DOMContentLoaded", () => {
     render();
   });
 
-  document.addEventListener("DOMContentLoaded", boot);
-})();
+  // Finally, run the boot sequence!
+  boot();
+});

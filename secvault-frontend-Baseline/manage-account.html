@@ -6,6 +6,7 @@
     <title>Manage Account - Metasys USA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="manage-account.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="lib/msal-browser.min.js"></script>
     <script>
@@ -19,32 +20,29 @@
     <script type="module" src="script.js"></script>
 </head>
 
-<body class="landing-body">
+<body class="dashboard-page">
     <header class="site-header">
-        <div class="header-images">
-            <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="logo" />
+        <div class="site-header__content">
+            <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="site-logo" />
             <div class="profile-menu">
-                <div id="profile-icon-btn" class="profile-icon-btn" aria-haspopup="true" aria-expanded="false"
-                    aria-controls="profile-dropdown" tabindex="0" role="button" aria-label="User account menu">
-                    <div class="profile-avatar">M</div>
-                </div>
-                <div id="profile-dropdown" class="profile-dropdown-content" hidden>
+                <button id="gear-btn" class="gear-btn">
+                    <img src="images/GearBoxImage.png" alt="Settings" class="gear-icon" />
+                </button>
+                <div id="profile-dropdown" class="profile-dropdown-content">
+                    <span class="close-btn">&times;</span>
                     <div class="profile-header">
-                        <p id="profile-email" class="muted fw-600">user@example.com</p>
-                        <div class="profile-avatar-large" id="profile-avatar-large">
-                            M
-                        </div>
-                        <p id="welcome-message">Hi, Member!</p>
+                        <div class="profile-avatar">M</div>
+                        <p>Hi, <span id="profile-name">Member</span>!</p>
                     </div>
-                    <div class="profile-links">
-                        <a href="manage-account.html" class="profile-link">Manage your account</a>
-                        <a href="login.html" class="profile-link logout">Sign out</a>
-                    </div>
+                    <a href="Manage-Account.html" class="manage-account-btn">Manage your Account</a>
+                    <a href="login.html" class="logout-link">
+                        <button class="btn--logout">Logout</button>
+                    </a>
                 </div>
             </div>
         </div>
     </header>
-    <div class="dashboard-container">
+    <div class="dashboard-layout">
         <nav class="site-nav" aria-label="Primary">
             <ul>
                 <li>
