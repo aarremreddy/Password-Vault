@@ -1,0 +1,64 @@
+/* =========================
+   ADMIN.HTML STYLES
+   ========================= */
+
+/* Admin specific colors and layout */
+.dashboard-layout {
+    display: flex;
+    flex: 1;
+}
+
+.site-nav {
+    width: 200px;
+    background: #6aa8f5;
+    /* Admin Sidebar Blue */
+    color: #fff;
+    min-height: 400px;
+    padding-top: 30px;
+}
+
+.site-nav ul li:hover {
+    background: #2875D8;
+}
+
+.profile-avatar {
+    background-color: #7B1FA2;
+    color: #fff;
+}
+
+/* Admin Search Bar (Akruth's look) */
+.search-bar-container {
+    display: flex;
+    justify-content: flex-start;
+    /* Aligned for admin page look */
+    align-items: center;
+    margin-top: 50px;
+    gap: 10px;
+    padding: 0 40px;
+    /* Admin page content padding */
+}
+
+.search-input {
+    width: 300px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn--search {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Pagination container is left to be styled by global styles, 
+   but the specific admin table content is placed here for completeness */
+#users-table-container {
+    margin-top: 20px;
+    padding: 0 40px;
+    overflow-x: auto;
+}

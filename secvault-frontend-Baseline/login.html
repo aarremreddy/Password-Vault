@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetasysUSA - Login Page</title>
+    <link rel="stylesheet" href="style.css">
+
+
+    <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"
+        onerror="var s=document.createElement('script'); s.src='lib/msal-browser.min.js'; document.head.appendChild(s);"
+        defer>
+        </script>
+
+    <script type="module" src="script.js" defer></script>
+</head>
+
+<body class="login-page">
+    <div id="signinOverlay" class="overlay hide" style="display:none">Signing you in…</div>
+    <div class="login-page__content">
+        <div class="login-page__intro">
+            <h1 class="login-page__logo">METASYS USA</h1>
+            <h2 class="login-page__tagline">The Professional IT Staffing</h2>
+        </div>
+
+        <div class="login-card">
+            <form id="loginForm" novalidate>
+                <input id="username" class="form-field" type="text" placeholder="Username" autocomplete="username">
+                <input id="password" class="form-field" type="password" placeholder="Password"
+                    autocomplete="current-password">
+
+                <button class="btn btn--primary" type="submit">Login</button>
+
+                <a href="#" class="login-card__forgot-link">Forgot password?</a>
+                <div class="login-card__divider"></div>
+
+                <button id="ms-login" type="button" class="btn--microsoft">Login with Microsoft</button>
+
+                <br>
+                <button type="button" class="btn--create-account">Create new account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="alertWindow" class="modal" role="dialog" aria-modal="true" aria-labelledby="alertTitle">
+        <div class="modal__content">
+            <button type="button" class="modal__close-btn" aria-label="Close">&times;</button>
+            <p id="errorMessage">Something went wrong</p>
+            <button id="okBtn" type="button" class="btn--alert">OK</button>
+        </div>
+    </div>
+</body>
+
+</html>

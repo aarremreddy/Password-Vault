@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Metasys USA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="lib/msal-browser.min.js"></script>
+  <script>
+    if (!window.msal) {
+      var s = document.createElement("script");
+      s.src = "https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js";
+      document.head.appendChild(s);
+    }
+  </script>
+  <script type="module" src="script.js"></script>
+</head>
+
+<body class="dashboard-page">
+  <header class="site-header">
+    <div class="site-header__content">
+      <img src="https://metasysusa.com/images/logo.svg" alt="Metasys USA Logo" class="site-logo" />
+      <div class="profile-menu">
+        <button id="gear-btn" class="gear-btn">
+          <img src="images/GearBoxImage.png" alt="Settings" class="gear-icon" />
+        </button>
+        <div id="profile-dropdown" class="profile-dropdown-content">
+          <span class="close-btn">&times;</span>
+          <div class="profile-header">
+            <div class="profile-avatar">M</div>
+            <p>Hi, <span id="profile-name">Member</span>!</p>
+          </div>
+          <a href="Manage-Account.html" class="manage-account-btn">Manage your Account</a>
+          <a href="login.html" class="logout-link">
+            <button class="btn--logout">Logout</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="dashboard-layout">
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li>
+          <div class="nav-item__header client-services-bar">
+            <a href="client-landing.html" style="color: inherit; text-decoration: none;">
+              <span>Client Services</span>
+              <i class="chev" aria-hidden="true"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="nav-item__header">
+            <span>About</span>
+            <button class="nav-item__dropdown-btn" type="button" aria-label="Toggle About menu">&#9660;</button>
+          </div>
+          <div class="nav-item__dropdown">
+            <a href="https://metasysusa.com/index.html" target="_blank">Our Story</a>
+            <a href="#">Mission &amp; Vision</a>
+            <a href="#">Team</a>
+          </div>
+        </li>
+        <li>
+          <div class="nav-item__header">
+            <span>Services</span>
+            <button class="nav-item__dropdown-btn" type="button" aria-label="Toggle Services menu">&#9660;</button>
+          </div>
+          <div class="nav-item__dropdown">
+            <a href="https://metasysusa.com/service.html" target="_blank">IT Staffing</a>
+            <a href="#">IT Implementation</a>
+            <a href="#">Consultation</a>
+          </div>
+        </li>
+        <li>
+          <div class="nav-item__header">
+            <span>Join Us</span>
+            <button class="nav-item__dropdown-btn" type="button" aria-label="Toggle Join Us menu">&#9660;</button>
+          </div>
+          <div class="nav-item__dropdown">
+            <a href="https://metasysusa.com/join-us.html" target="_blank">Career Opportunities</a>
+            <a href="#">Open Positions</a>
+            <a href="#">Apply Now</a>
+          </div>
+        </li>
+        
+      </ul>
+    </nav>
+    <main>
+      <section class="card">
+        <h1 class="title" id="welcomeMsg">Welcome <span id="welcome-name">Member</span></h1>
+        <p class="muted">
+          The premier provider of exceptional IT staffing and implementation solutions. We are driven by our deep-rooted
+          passion for technology and our unwavering commitment to excellence.
+        </p>
+        <p class="muted">
+          At Metasys, we empower businesses to not only navigate but thrive in the ever-evolving digital landscape.
+        </p>
+      </section>
+    </main>
+  </div>
+  <footer class="site-footer">
+    <span>6 Kacey Ct, Mechanicsburg, PA, USA, 17055</span>
+    <a href="https://metasysusa.com/" class="footer-contact" target="_blank">Contact Us</a>
+  </footer>
+</body>
+
+</html>
